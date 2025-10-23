@@ -1,0 +1,211 @@
+[
+  {
+    "id": "pechuga_pollo",
+    "nombre": "Pechuga de pollo",
+    "tipo": "Proteína animal",
+    "cantidadBase": 100,
+    "unidad": "g",
+    "proteina": 31,
+    "carbohidratos": 0,
+    "grasas": 3.5,
+    "equivalentes": ["Jamón de pavo/pollo", "Carne magra"]
+  },
+  {
+    "id": "jamon_pavo",
+    "nombre": "Jamón de pavo/pollo",
+    "tipo": "Proteína animal",
+    "cantidadBase": 40,
+    "unidad": "g",
+    "proteina": 10,
+    "carbohidratos": 1,
+    "grasas": 1,
+    "equivalentes": ["Pechuga de pollo"]
+  },
+  {
+    "id": "pescado_blanco",
+    "nombre": "Pescado blanco (merluza, reineta)",
+    "tipo": "Proteína animal",
+    "cantidadBase": 100,
+    "unidad": "g",
+    "proteina": 25,
+    "carbohidratos": 0,
+    "grasas": 2,
+    "equivalentes": ["Atún en agua"]
+  },
+  {
+    "id": "atun_agua",
+    "nombre": "Atún en agua",
+    "tipo": "Proteína animal",
+    "cantidadBase": 80,
+    "unidad": "g",
+    "proteina": 18,
+    "carbohidratos": 0,
+    "grasas": 1,
+    "equivalentes": ["Pescado blanco"]
+  },
+  {
+    "id": "huevo_entero",
+    "nombre": "Huevo entero",
+    "tipo": "Proteína animal",
+    "cantidadBase": 60,
+    "unidad": "g",
+    "proteina": 6,
+    "carbohidratos": 0.5,
+    "grasas": 5,
+    "equivalentes": ["Claras de huevo"]
+  },
+  {
+    "id": "queso_fresco",
+    "nombre": "Queso fresco",
+    "tipo": "Proteína animal",
+    "cantidadBase": 50,
+    "unidad": "g",
+    "proteina": 8,
+    "carbohidratos": 1,
+    "grasas": 4,
+    "equivalentes": ["Queso bajo en grasa"]
+  },
+  {
+    "id": "lentejas_cocidas",
+    "nombre": "Lentejas cocidas",
+    "tipo": "Proteína vegetal",
+    "cantidadBase": 100,
+    "unidad": "g",
+    "proteina": 9,
+    "carbohidratos": 20,
+    "grasas": 0.5,
+    "equivalentes": ["Garbanzos cocidos", "Porotos negros"]
+  },
+  {
+    "id": "garbanzos_cocidos",
+    "nombre": "Garbanzos cocidos",
+    "tipo": "Proteína vegetal",
+    "cantidadBase": 100,
+    "unidad": "g",
+    "proteina": 9,
+    "carbohidratos": 27,
+    "grasas": 2.5,
+    "equivalentes": ["Lentejas cocidas"]
+  },
+  {
+    "id": "tofu",
+    "nombre": "Tofu",
+    "tipo": "Proteína vegetal",
+    "cantidadBase": 100,
+    "unidad": "g",
+    "proteina": 8,
+    "carbohidratos": 2,
+    "grasas": 4,
+    "equivalentes": ["Tempeh"]
+  },
+  {
+    "id": "arroz_blanco",
+    "nombre": "Arroz blanco cocido",
+    "tipo": "Carbohidrato complejo",
+    "cantidadBase": 100,
+    "unidad": "g",
+    "proteina": 2.5,
+    "carbohidratos": 28,
+    "grasas": 0.3,
+    "equivalentes": ["Arroz integral", "Quinoa cocida"]
+  },
+  {
+    "id": "arroz_integral",
+    "nombre": "Arroz integral cocido",
+    "tipo": "Carbohidrato complejo",
+    "cantidadBase": 100,
+    "unidad": "g",
+    "proteina": 2.6,
+    "carbohidratos": 25,
+    "grasas": 0.9,
+    "equivalentes": ["Arroz blanco", "Quinoa cocida"]
+  },
+  {
+    "id": "quinoa_cocida",
+    "nombre": "Quinoa cocida",
+    "tipo": "Carbohidrato complejo",
+    "cantidadBase": 100,
+    "unidad": "g",
+    "proteina": 4,
+    "carbohidratos": 21,
+    "grasas": 2,
+    "equivalentes": ["Arroz integral", "Arroz blanco"]
+  },
+  {
+    "id": "fideos_integrales",
+    "nombre": "Fideos integrales",
+    "tipo": "Carbohidrato complejo",
+    "cantidadBase": 100,
+    "unidad": "g",
+    "proteina": 5,
+    "carbohidratos": 30,
+    "grasas": 1,
+    "equivalentes": ["Pasta blanca"]
+  },
+  {
+    "id": "aceite_oliva",
+    "nombre": "Aceite de oliva",
+    "tipo": "Grasa saludable",
+    "cantidadBase": 10,
+    "unidad": "ml",
+    "proteina": 0,
+    "carbohidratos": 0,
+    "grasas": 10,
+    "equivalentes": ["Aceite de canola"]
+  },
+  {
+    "id": "palta",
+    "nombre": "Palta",
+    "tipo": "Grasa saludable",
+    "cantidadBase": 50,
+    "unidad": "g",
+    "proteina": 1,
+    "carbohidratos": 4,
+    "grasas": 7,
+    "equivalentes": ["Aguacate"]
+  },
+  {
+    "id": "maní_natural",
+    "nombre": "Maní natural",
+    "tipo": "Grasa saludable",
+    "cantidadBase": 20,
+    "unidad": "g",
+    "proteina": 5,
+    "carbohidratos": 4,
+    "grasas": 10,
+    "equivalentes": ["Nueces"]
+  },
+  {
+    "id": "manzana",
+    "nombre": "Manzana",
+    "tipo": "Fruta",
+    "cantidadBase": 120,
+    "unidad": "g",
+    "proteina": 0,
+    "carbohidratos": 15,
+    "grasas": 0,
+    "equivalentes": ["Pera"]
+  },
+  {
+    "id": "platano",
+    "nombre": "Plátano",
+    "tipo": "Fruta",
+    "cantidadBase": 100,
+    "unidad": "g",
+    "proteina": 1,
+    "carbohidratos": 23,
+    "grasas": 0,
+    "equivalentes": ["Batata"]
+  },
+  {
+    "id": "brocoli",
+    "nombre": "Brócoli",
+    "tipo": "Verdura",
+    "cantidadBase": 100,
+    "unidad": "g",
+    "proteina": 3,
+    "carbohidratos": 7,
+    "grasas": 0,
+    "equivalentes": ["Espinaca"]
+  }
+]
