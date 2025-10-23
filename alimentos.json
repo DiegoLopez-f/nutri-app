@@ -207,5 +207,148 @@
     "carbohidratos": 7,
     "grasas": 0,
     "equivalentes": ["Espinaca"]
+  },
+  {
+    "id": "avena_cocida",
+    "nombre": "Avena cocida",
+    "tipo": "Carbohidrato complejo",
+    "cantidadBase": 100,
+    "unidad": "g",
+    "proteina": 2.5,
+    "carbohidratos": 12,
+    "grasas": 1.5,
+    "equivalentes": []
+  },
+  {
+    "id": "leche_descremada",
+    "nombre": "Leche descremada",
+    "tipo": "Lácteo",
+    "cantidadBase": 200,
+    "unidad": "ml",
+    "proteina": 7,
+    "carbohidratos": 10,
+    "grasas": 0.2,
+    "equivalentes": []
+  },
+  {
+    "id": "nueces",
+    "nombre": "Nueces",
+    "tipo": "Grasa saludable",
+    "cantidadBase": 20,
+    "unidad": "g",
+    "proteina": 3,
+    "carbohidratos": 2,
+    "grasas": 13,
+    "equivalentes": ["Maní natural"]
+  },
+  {
+    "id": "yogur_natural_alto_proteina",
+    "nombre": "Yogur natural alto en proteína",
+    "tipo": "Lácteo",
+    "cantidadBase": 150,
+    "unidad": "g",
+    "proteina": 12,
+    "carbohidratos": 5,
+    "grasas": 0.5,
+    "equivalentes": []
+  },
+  {
+    "id": "pure_papas",
+    "nombre": "Puré de papas",
+    "tipo": "Carbohidrato complejo",
+    "cantidadBase": 100,
+    "unidad": "g",
+    "proteina": 2,
+    "carbohidratos": 15,
+    "grasas": 0.2,
+    "equivalentes": []
+  },
+  {
+    "id": "tomate",
+    "nombre": "Tomate",
+    "tipo": "Verdura",
+    "cantidadBase": 100,
+    "unidad": "g",
+    "proteina": 1,
+    "carbohidratos": 3,
+    "grasas": 0.2,
+    "equivalentes": []
+  },
+  {
+    "id": "lechuga",
+    "nombre": "Lechuga",
+    "tipo": "Verdura",
+    "cantidadBase": 50,
+    "unidad": "g",
+    "proteina": 0.5,
+    "carbohidratos": 1,
+    "grasas": 0.1,
+    "equivalentes": []
+  },
+  {
+    "id": "miel",
+    "nombre": "Miel",
+    "tipo": "Azúcar natural",
+    "cantidadBase": 10,
+    "unidad": "g",
+    "proteina": 0,
+    "carbohidratos": 8,
+    "grasas": 0,
+    "equivalentes": []
+  },
+  {
+    "id": "zanahoria",
+    "nombre": "Zanahoria",
+    "tipo": "Verdura",
+    "cantidadBase": 100,
+    "unidad": "g",
+    "proteina": 1,
+    "carbohidratos": 8,
+    "grasas": 0.2,
+    "equivalentes": []
+  },
+  {
+    "id": "pan_integral",
+    "nombre": "Pan integral",
+    "tipo": "Carbohidrato complejo",
+    "cantidadBase": 30,
+    "unidad": "g",
+    "proteina": 3,
+    "carbohidratos": 13,
+    "grasas": 1,
+    "equivalentes": []
+  },
+  {
+    "id": "camote_cocido",
+    "nombre": "Camote cocido",
+    "tipo": "Carbohidrato complejo",
+    "cantidadBase": 100,
+    "unidad": "g",
+    "proteina": 1,
+    "carbohidratos": 20,
+    "grasas": 0.1,
+    "equivalentes": []
+  },
+  {
+    "id": "carne_magra",
+    "nombre": "Carne magra",
+    "tipo": "Proteína animal",
+    "cantidadBase": 100,
+    "unidad": "g",
+    "proteina": 22,
+    "carbohidratos": 0,
+    "grasas": 5,
+    "equivalentes": ["Pechuga de pollo"]
+  },
+  {
+    "id": "zapallo_italiano",
+    "nombre": "Zapallo italiano",
+    "tipo": "Verdura",
+    "cantidadBase": 100,
+    "unidad": "g",
+    "proteina": 1,
+    "carbohidratos": 3,
+    "grasas": 0.2,
+    "equivalentes": []
   }
 ]

@@ -1,18 +1,21 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
-import planes from "./planes.json";
+import fs from "fs";
+
 
 const firebaseConfig = {
-    apiKey: "TU_API_KEY",
-    authDomain: "TU_PROJECT.firebaseapp.com",
-    projectId: "TU_PROJECT_ID",
-    storageBucket: "TU_PROJECT.appspot.com",
-    messagingSenderId: "TU_MESSAGING_ID",
-    appId: "TU_APP_ID"
+    apiKey: "AIzaSyDb9BAU5dAO78He70VjAOvEbbnmjvBa98M",
+    authDomain: "plataformanutricl.firebaseapp.com",
+    projectId: "plataformanutricl",
+    storageBucket: "plataformanutricl.firebasestorage.app",
+    messagingSenderId: "985581466306",
+    appId: "1:985581466306:web:e8918843fa615b9d43c15b",
+    measurementId: "G-6CCHYTVJ16"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const planes = JSON.parse(fs.readFileSync("./planes.json", "utf-8"));
 
 async function importarPlanes() {
     for (const plan of planes) {
@@ -23,4 +26,4 @@ async function importarPlanes() {
     }
 }
 
-importPlanes().then(() => console.log("¡Todos los planes han sido importados!"));
+importarPlanes().then(() => console.log("¡Todos los planes han sido importados!"));
