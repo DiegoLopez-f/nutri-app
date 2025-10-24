@@ -2,7 +2,7 @@
   "planA": {
     "nombre": "Plan A",
     "descripcion": "Ciclo de 3 días con rotación proteica, iniciando con base de avena.",
-    "asignadoA": "paciente1",
+    "asignadoA": "qzOtpRMjw8XOm4fULP9I",
     "versiones": {
       "volumen": {
         "tipo": "Volumen",
@@ -127,7 +127,7 @@
   "planB": {
     "nombre": "Plan B",
     "descripcion": "Ciclo con base en pan integral y mayor énfasis en proteína y grasa matutina.",
-    "asignadoA": "paciente1",
+    "asignadoA": "uHOo0Wre852gTmw49pGr",
     "versiones": {
       "volumen": {
         "tipo": "Volumen",
@@ -249,7 +249,7 @@
   "planC": {
     "nombre": "Plan C",
     "descripcion": "Ciclo con mayor aporte de legumbres para variar el perfil de fibra.",
-    "asignadoA": "paciente1",
+    "asignadoA": "qzOtpRMjw8XOm4fULP9I",
     "versiones": {
       "volumen": {
         "tipo": "Volumen",

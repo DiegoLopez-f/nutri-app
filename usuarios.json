@@ -1,0 +1,138 @@
+{
+  "nutricionistas": [
+    {
+      "nombre": "Carla Gómez",
+      "email": "carla.gomez@nutriapp.com",
+      "tipo": 1,
+      "perfil_nutricional": {
+        "altura": 165,
+        "peso": 60,
+        "objetivo": "Acompañar a pacientes en sus planes de alimentación.",
+        "alergias": [],
+        "restricciones": []
+      },
+      "pacientes": [
+        {
+          "pacienteId": "diego.lopez@nutriapp.com",
+          "fecha_asignacion": "",
+          "notas": "",
+          "progreso": ""
+        },
+        {
+          "pacienteId": "valentina.rojas@nutriapp.com",
+          "fecha_asignacion": "",
+          "notas": "",
+          "progreso": ""
+        }
+      ]
+    },
+    {
+      "nombre": "Andrés Salinas",
+      "email": "andres.salinas@nutriapp.com",
+      "tipo": 1,
+      "perfil_nutricional": {
+        "altura": 172,
+        "peso": 68,
+        "objetivo": "Diseñar planes personalizados.",
+        "alergias": [],
+        "restricciones": []
+      },
+      "pacientes": [
+        {
+          "pacienteId": "felipe.castro@nutriapp.com",
+          "fecha_asignacion": "",
+          "notas": "",
+          "progreso": ""
+        },
+        {
+          "pacienteId": "camila.torres@nutriapp.com",
+          "fecha_asignacion": "",
+          "notas": "",
+          "progreso": ""
+        }
+      ]
+    },
+    {
+      "nombre": "Marcela Pizarro",
+      "email": "marcela.pizarro@nutriapp.com",
+      "tipo": 1,
+      "perfil_nutricional": {
+        "altura": 160,
+        "peso": 55,
+        "objetivo": "Optimizar la salud metabólica de sus pacientes.",
+        "alergias": [],
+        "restricciones": []
+      },
+      "pacientes": [
+        {
+          "pacienteId": "ignacio.herrera@nutriapp.com",
+          "fecha_asignacion": "",
+          "notas": "",
+          "progreso": ""
+        }
+      ]
+    }
+  ],
+  "pacientes": [
+    {
+      "nombre": "Diego López",
+      "email": "diego.lopez@nutriapp.com",
+      "tipo": 2,
+      "perfil_nutricional": {
+        "altura": 170,
+        "peso": 56,
+        "objetivo": "Ganar masa muscular y mejorar la postura.",
+        "alergias": [],
+        "restricciones": []
+      }
+    },
+    {
+      "nombre": "Valentina Rojas",
+      "email": "valentina.rojas@nutriapp.com",
+      "tipo": 2,
+      "perfil_nutricional": {
+        "altura": 163,
+        "peso": 52,
+        "objetivo": "Definición muscular y mantener energía estable.",
+        "alergias": [],
+        "restricciones": []
+      }
+    },
+    {
+      "nombre": "Felipe Castro",
+      "email": "felipe.castro@nutriapp.com",
+      "tipo": 2,
+      "perfil_nutricional": {
+        "altura": 178,
+        "peso": 75,
+        "objetivo": "Mejorar resistencia física y control de peso.",
+        "alergias": [],
+        "restricciones": []
+      }
+    },
+    {
+      "nombre": "Camila Torres",
+      "email": "camila.torres@nutriapp.com",
+      "tipo": 2,
+      "perfil_nutricional": {
+        "altura": 167,
+        "peso": 58,
+        "objetivo": "Aumentar masa magra sin subir grasa.",
+        "alergias": [],
+        "restricciones": []
+      }
+    },
+    {
+      "nombre": "Ignacio Herrera",
+      "email": "ignacio.herrera@nutriapp.com",
+      "tipo": 2,
+      "perfil_nutricional": {
+        "altura": 180,
+        "peso": 70,
+        "objetivo": "Mantener condición física y energía.",
+        "alergias": [],
+        "restricciones": []
+      }
+    }
+  ]
+}
