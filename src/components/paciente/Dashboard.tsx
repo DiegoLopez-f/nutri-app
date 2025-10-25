@@ -104,7 +104,7 @@ const Dashboard: React.FC<DashboardProps> = ({ pacienteId }) => {
             <div className="bg-white p-6 rounded-xl shadow-xl border border-green-200 relative">
 
                 {/* Botón de navegación a la derecha */}
-                <Link href={`/paciente/${pacienteId}/planes`} passHref>
+                <Link href={`/paciente/planes`} passHref>
                     <button
                         className="absolute top-4 right-4 bg-[#4ADE80] text-gray-800 font-semibold py-2 px-4 rounded-full text-sm shadow-md hover:bg-[#059669] hover:text-white transition duration-200 flex items-center"
                     >
