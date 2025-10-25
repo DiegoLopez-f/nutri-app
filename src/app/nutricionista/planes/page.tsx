@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation'; // 👈 Import necesario
 import { db } from '@/lib/firebase';
-import { collection, getDocs, doc, getDoc, CollectionReference } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import CardPlan from '@/components/CardPlan';
 import TableAlimentos from '@/components/TableAlimentos';
 
@@ -65,10 +66,15 @@ export default function PlanesPage() {
     const [versionSeleccionada, setVersionSeleccionada] = useState<{ [planId: string]: 'volumen' | 'recomposicion' }>({});
     const [loading, setLoading] = useState(true);
 
+    const router = useRouter(); // 👈 Para redirección
+
+    const handleNavigate = () => {
+        router.push('/plancreator'); // 👈 Redirige al crear un nuevo plan
+    };
+
     useEffect(() => {
         const fetchPlanesYAlimentos = async () => {
             try {
-                // 🔹 1. Cargar catálogo de alimentos
                 const alimentosSnapshot = await getDocs(collection(db, 'alimentos'));
                 const alimentosBaseData: AlimentoBase[] = alimentosSnapshot.docs.map(doc => {
                     const data = doc.data();
@@ -86,14 +92,11 @@ export default function PlanesPage() {
                 });
                 setAlimentosBase(alimentosBaseData);
 
-                // 🔹 2. Cargar los planes
                 const planesSnapshot = await getDocs(collection(db, 'planes'));
                 const planesData: Plan[] = [];
 
                 for (const planDoc of planesSnapshot.docs) {
                     const planData = planDoc.data();
-
-                    // Cargar versiones (subcolección)
                     const versionesRef = collection(db, `planes/${planDoc.id}/versiones`);
                     const versionesSnapshot = await getDocs(versionesRef);
 
@@ -137,16 +140,20 @@ export default function PlanesPage() {
     };
 
     if (loading)
-        return (
-            <div className="text-gray-300 text-lg text-center mt-10">
-                Cargando planes...
-            </div>
-        );
+        return <div className="text-gray-300 text-lg text-center mt-10">Cargando planes...</div>;
 
     if (!planes.length)
         return (
             <div className="text-gray-400 text-center mt-10">
                 No hay planes disponibles aún.
+                <div className="mt-6">
+                    <button
+                        onClick={handleNavigate}
+                        className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow transition-all duration-200"
+                    >
+                        ➕ Crear nuevo plan
+                    </button>
+                </div>
             </div>
         );
 
@@ -155,6 +162,15 @@ export default function PlanesPage() {
             <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">
                 Planes de Alimentación
             </h1>
+
+            <div className="flex justify-center mb-10">
+                <button
+                    onClick={handleNavigate}
+                    className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow transition-all duration-200"
+                >
+                    ➕ Crear nuevo plan
+                </button>
+            </div>
 
             {planes.map(plan => {
                 const versionActiva =
@@ -175,7 +191,8 @@ export default function PlanesPage() {
                             <div>
                                 <h2 className="text-2xl font-bold text-indigo-300">{plan.nombre}</h2>
                                 <p className="text-gray-400 text-sm">
-                                    Asignado a: <span className="text-indigo-400">{plan.asignadoA}</span>
+                                    Asignado a:{' '}
+                                    <span className="text-indigo-400">{plan.asignadoA}</span>
                                 </p>
                                 <p className="text-gray-400 mt-1">{plan.descripcion}</p>
                             </div>
@@ -195,7 +212,9 @@ export default function PlanesPage() {
                                 )}
                                 {plan.versiones.recomposicion && (
                                     <button
-                                        onClick={() => handleToggleVersion(plan.id, 'recomposicion')}
+                                        onClick={() =>
+                                            handleToggleVersion(plan.id, 'recomposicion')
+                                        }
                                         className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
                                             versionActiva === 'recomposicion'
                                                 ? 'bg-indigo-500 text-white'
