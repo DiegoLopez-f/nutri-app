@@ -8,6 +8,7 @@ import CardPlan from '@/components/CardPlan';
 import TableAlimentos from '@/components/TableAlimentos';
 import { Plus, ChevronDown, ChevronUp } from 'lucide-react';
 
+// ... (Interfaces AlimentoBase, PlanAlimento, Comida, VersionPlan, Plan no cambian) ...
 interface AlimentoBase {
     id: string;
     nombre: string;
@@ -61,6 +62,7 @@ interface Plan {
     };
 }
 
+
 export default function PlanesPage() {
     const [planes, setPlanes] = useState<Plan[]>([]);
     const [alimentosBase, setAlimentosBase] = useState<AlimentoBase[]>([]);
@@ -69,6 +71,7 @@ export default function PlanesPage() {
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
+    // ... (useEffect para 'alimentos' y 'planes' quedan exactamente igual) ...
     // 🔹 Escuchar alimentos en tiempo real
     useEffect(() => {
         const unsub = onSnapshot(collection(db, 'alimentos'), (snapshot) => {
@@ -132,7 +135,10 @@ export default function PlanesPage() {
         return () => unsub();
     }, []);
 
-    const handleToggleVersion = (planId: string, version: 'volumen' | 'recomposicion') => {
+
+    // --- CAMBIO 1: Modificar la función para detener la propagación ---
+    const handleToggleVersion = (e: React.MouseEvent, planId: string, version: 'volumen' | 'recomposicion') => {
+        e.stopPropagation(); // Evita que el clic pliegue/despliegue la tarjeta
         setVersionSeleccionada((prev) => ({
             ...prev,
             [planId]: version,
@@ -189,11 +195,12 @@ export default function PlanesPage() {
                         key={plan.id}
                         className="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-md hover:shadow-lg transition duration-200"
                     >
-                        {/* Encabezado del plan */}
+                        {/* --- CAMBIO 2: Mover los botones al encabezado --- */}
                         <div
                             className="flex justify-between items-center cursor-pointer"
                             onClick={() => togglePlan(plan.id)}
                         >
+                            {/* Lado izquierdo: Títulos */}
                             <div>
                                 <h2 className="text-2xl font-bold text-indigo-300">
                                     {plan.nombre}
@@ -204,12 +211,47 @@ export default function PlanesPage() {
                                 </p>
                                 <p className="text-gray-400 mt-1">{plan.descripcion}</p>
                             </div>
-                            {planesExpandido[plan.id] ? (
-                                <ChevronUp className="text-indigo-300 w-6 h-6" />
-                            ) : (
-                                <ChevronDown className="text-indigo-300 w-6 h-6" />
-                            )}
+
+                            {/* Lado derecho: Botones y Chevron */}
+                            <div className="flex items-center space-x-4">
+                                {/* Botones de versión (movidos aquí) */}
+                                <div className="flex space-x-2">
+                                    {plan.versiones.volumen && (
+                                        <button
+                                            onClick={(e) => handleToggleVersion(e, plan.id, 'volumen')}
+                                            className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
+                                                versionActiva === 'volumen'
+                                                    ? 'bg-indigo-500 text-white'
+                                                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                            }`}
+                                        >
+                                            Volumen
+                                        </button>
+                                    )}
+                                    {plan.versiones.recomposicion && (
+                                        <button
+                                            onClick={(e) => handleToggleVersion(e, plan.id, 'recomposicion')}
+                                            className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
+                                                versionActiva === 'recomposicion'
+                                                    ? 'bg-indigo-500 text-white'
+                                                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                            }`}
+                                        >
+                                            Recomposición
+                                        </button>
+                                    )}
+                                </div>
+
+                                {/* Icono Chevron */}
+                                {planesExpandido[plan.id] ? (
+                                    <ChevronUp className="text-indigo-300 w-6 h-6 flex-shrink-0" />
+                                ) : (
+                                    <ChevronDown className="text-indigo-300 w-6 h-6 flex-shrink-0" />
+                                )}
+                            </div>
                         </div>
+                        {/* --- FIN DEL CAMBIO --- */}
+
 
                         {/* Contenido expandible */}
                         <div
@@ -217,32 +259,7 @@ export default function PlanesPage() {
                                 planesExpandido[plan.id] ? 'max-h-[4000px] mt-4' : 'max-h-0'
                             }`}
                         >
-                            <div className="flex space-x-2 mt-4 sm:mt-0">
-                                {plan.versiones.volumen && (
-                                    <button
-                                        onClick={() => handleToggleVersion(plan.id, 'volumen')}
-                                        className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
-                                            versionActiva === 'volumen'
-                                                ? 'bg-indigo-500 text-white'
-                                                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                                        }`}
-                                    >
-                                        Volumen
-                                    </button>
-                                )}
-                                {plan.versiones.recomposicion && (
-                                    <button
-                                        onClick={() => handleToggleVersion(plan.id, 'recomposicion')}
-                                        className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
-                                            versionActiva === 'recomposicion'
-                                                ? 'bg-indigo-500 text-white'
-                                                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                                        }`}
-                                    >
-                                        Recomposición
-                                    </button>
-                                )}
-                            </div>
+                            {/* Los botones de versión ya no están aquí */}
 
                             {dataVersion && (
                                 <>
