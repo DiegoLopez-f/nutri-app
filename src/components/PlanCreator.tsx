@@ -17,6 +17,8 @@ export interface Alimento {
 export interface PlanItem extends Alimento {
     cantidad: number;
     unidad: string;
+    idLocal: string;     // Solo para la lista en React
+    idOriginal: string;  // Referencia real a Firestore
 }
 
 export type Comida = 'Desayuno' | 'Colacion' | 'Almuerzo' | 'Cena';
@@ -24,6 +26,7 @@ export type Comida = 'Desayuno' | 'Colacion' | 'Almuerzo' | 'Cena';
 export interface PlanNutricional {
     id?: string;
     nombrePlan: string;
+    tipo: 'Volumen' | 'Recomposición';
     fechaCreacion: Date;
     items: Record<Comida, PlanItem[]>;
     macrosTotales: {
@@ -43,7 +46,7 @@ export const INITIAL_PLAN_ITEMS: Record<Comida, PlanItem[]> = {
 
 const parseNumber = (value: any): number => {
     const num = parseFloat(value);
-    return isNaN(num) || num === null || num === undefined ? 0 : num;
+    return isNaN(num) || num === null || value === undefined ? 0 : num;
 };
 
 const calcularTotales = (planItems: Record<Comida, PlanItem[]>) => {
@@ -64,6 +67,7 @@ const calcularTotales = (planItems: Record<Comida, PlanItem[]>) => {
 const PlanCreator: React.FC = () => {
     const [alimentosMaestros, setAlimentosMaestros] = useState<Alimento[]>([]);
     const [nombrePlan, setNombrePlan] = useState('');
+    const [tipoPlan, setTipoPlan] = useState<'Volumen' | 'Recomposición'>('Volumen');
     const [planItems, setPlanItems] = useState<Record<Comida, PlanItem[]>>(INITIAL_PLAN_ITEMS);
     const [selectedComida, setSelectedComida] = useState<Comida>('Desayuno');
     const [selectedFoodId, setSelectedFoodId] = useState('');
@@ -119,7 +123,8 @@ const PlanCreator: React.FC = () => {
                 ...foodToAdd,
                 cantidad,
                 unidad,
-                id: `${foodToAdd.id}-${Date.now()}`,
+                idLocal: crypto.randomUUID(),  // solo para la lista
+                idOriginal: foodToAdd.id,      // referencia real a Firestore
             };
             setPlanItems(prev => ({
                 ...prev,
@@ -136,19 +141,36 @@ const PlanCreator: React.FC = () => {
             alert('El plan debe tener un nombre y al menos un alimento.');
             return;
         }
+
         try {
             setCargando(true);
             const totales = calcularTotales(planItems);
-            const nuevoPlan: PlanNutricional = {
-                nombrePlan: nombrePlan.trim(),
+
+            // Transformar items para la estructura de PlanesPage
+            const comidasParaGuardar = Object.entries(planItems).map(([comida, items]) => ({
+                nombre: comida,
+                alimentos: items.map(item => ({
+                    refAlimento: item.idOriginal, // <-- clave para que PlanesPage lo reconozca
+                    cantidad: `${item.cantidad}${item.unidad}`,
+                })),
+            }));
+
+            const nuevoPlan = {
+                nombre: nombrePlan.trim(),
+                tipo: tipoPlan,
+                calorias: totales.calorias,
+                descripcion: '',
+                comidas: comidasParaGuardar,
                 fechaCreacion: new Date(),
-                items: planItems,
-                macrosTotales: totales,
             };
+
             await addDoc(collection(db, 'planes'), nuevoPlan);
+
             alert(`Plan "${nombrePlan}" guardado correctamente.`);
             setNombrePlan('');
+            setTipoPlan('Volumen');
             setPlanItems(INITIAL_PLAN_ITEMS);
+
         } catch (err) {
             console.error(err);
             alert('Error al guardar el plan.');
@@ -180,9 +202,7 @@ const PlanCreator: React.FC = () => {
                             onChange={e => setSelectedComida(e.target.value as Comida)}
                             className="w-full border rounded-lg p-2 mb-4"
                         >
-                            {comidas.map(c => (
-                                <option key={c}>{c}</option>
-                            ))}
+                            {comidas.map(c => <option key={c}>{c}</option>)}
                         </select>
 
                         <label className="block mb-2 font-medium text-gray-700">Alimento</label>
@@ -239,6 +259,16 @@ const PlanCreator: React.FC = () => {
                             className="w-full border rounded-lg p-2 mb-4"
                         />
 
+                        <label className="block mb-2 font-medium text-gray-700">Tipo de Plan</label>
+                        <select
+                            value={tipoPlan}
+                            onChange={e => setTipoPlan(e.target.value as 'Volumen' | 'Recomposición')}
+                            className="w-full border rounded-lg p-2 mb-4"
+                        >
+                            <option value="Volumen">Volumen</option>
+                            <option value="Recomposición">Recomposición</option>
+                        </select>
+
                         <div className="bg-green-50 p-4 rounded-lg mb-4 border border-green-200">
                             <h4 className="text-green-700 font-semibold mb-2">Totales ({totalItems} ítems)</h4>
                             <p><strong>Calorías:</strong> {totalesActuales.calorias.toFixed(0)} kcal</p>
@@ -259,7 +289,7 @@ const PlanCreator: React.FC = () => {
                     </form>
                 </div>
 
-                {/* Columna Derecha */}
+                {/* Columna Derecha: vista previa */}
                 <div className="bg-white rounded-2xl shadow p-6 border border-green-100 overflow-y-auto max-h-[600px]">
                     {comidas.map(comida => (
                         <div key={comida} className="mb-6 border-b border-gray-200 pb-3">
@@ -269,16 +299,16 @@ const PlanCreator: React.FC = () => {
                             ) : (
                                 <ul className="space-y-2">
                                     {planItems[comida].map(item => (
-                                        <li key={item.id} className="flex justify-between items-center text-sm bg-green-50 p-2 rounded-md">
-                      <span className="text-green-800">
-                        {item.nombre} <span className="text-gray-500">({item.cantidad}{item.unidad})</span>
-                      </span>
+                                        <li key={item.idLocal} className="flex justify-between items-center text-sm bg-green-50 p-2 rounded-md">
+                                            <span className="text-green-800">
+                                                {item.nombre} <span className="text-gray-500">({item.cantidad}{item.unidad})</span>
+                                            </span>
                                             <button
                                                 type="button"
                                                 onClick={() =>
                                                     setPlanItems(prev => ({
                                                         ...prev,
-                                                        [comida]: prev[comida].filter(i => i.id !== item.id),
+                                                        [comida]: prev[comida].filter(i => i.idLocal !== item.idLocal),
                                                     }))
                                                 }
                                                 className="text-red-500 hover:text-red-700 font-bold text-xs"
