@@ -3,7 +3,8 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { db } from '../lib/firebase';
-import { collection, getDocs, QueryDocumentSnapshot, addDoc } from 'firebase/firestore';
+// CAMBIO: Importamos setDoc para crear documentos en subcolecciones
+import { collection, getDocs, QueryDocumentSnapshot, addDoc, doc, setDoc } from 'firebase/firestore';
 
 export interface Alimento {
     id: string;
@@ -17,25 +18,11 @@ export interface Alimento {
 export interface PlanItem extends Alimento {
     cantidad: number;
     unidad: string;
-    idLocal: string;     // Solo para la lista en React
-    idOriginal: string;  // Referencia real a Firestore
+    idLocal: string;
+    idOriginal: string;
 }
 
 export type Comida = 'Desayuno' | 'Colacion' | 'Almuerzo' | 'Cena';
-
-export interface PlanNutricional {
-    id?: string;
-    nombrePlan: string;
-    tipo: 'Volumen' | 'Recomposición';
-    fechaCreacion: Date;
-    items: Record<Comida, PlanItem[]>;
-    macrosTotales: {
-        calorias: number;
-        proteina: number;
-        grasas: number;
-        carbohidratos: number;
-    };
-}
 
 export const INITIAL_PLAN_ITEMS: Record<Comida, PlanItem[]> = {
     Desayuno: [],
@@ -53,16 +40,31 @@ const calcularTotales = (planItems: Record<Comida, PlanItem[]>) => {
     const todosLosItems = Object.values(planItems).flat();
     return todosLosItems.reduce(
         (acc, item) => {
-            const factor = item.cantidad / 100;
-            acc.calorias += (item.calorias || 0) * factor;
-            acc.proteina += (item.proteina || 0) * factor;
+            const factor = item.cantidad / 100; // Asumiendo macros por 100g
+            acc.kcal += (item.calorias || 0) * factor;
+            acc.proteinas += (item.proteina || 0) * factor;
             acc.grasas += (item.grasas || 0) * factor;
             acc.carbohidratos += (item.carbohidratos || 0) * factor;
             return acc;
         },
-        { calorias: 0, proteina: 0, grasas: 0, carbohidratos: 0 }
+        { kcal: 0, proteinas: 0, grasas: 0, carbohidratos: 0 }
     );
 };
+
+const calcularMacrosComida = (items: PlanItem[]): { kcal: number, proteinas: number, grasas: number, carbohidratos: number } => {
+    return items.reduce(
+        (acc, item) => {
+            const factor = item.cantidad / 100;
+            acc.kcal += (item.calorias || 0) * factor;
+            acc.proteinas += (item.proteina || 0) * factor;
+            acc.grasas += (item.grasas || 0) * factor;
+            acc.carbohidratos += (item.carbohidratos || 0) * factor;
+            return acc;
+        },
+        { kcal: 0, proteinas: 0, grasas: 0, carbohidratos: 0 }
+    );
+};
+
 
 const PlanCreator: React.FC = () => {
     const [alimentosMaestros, setAlimentosMaestros] = useState<Alimento[]>([]);
@@ -123,8 +125,8 @@ const PlanCreator: React.FC = () => {
                 ...foodToAdd,
                 cantidad,
                 unidad,
-                idLocal: crypto.randomUUID(),  // solo para la lista
-                idOriginal: foodToAdd.id,      // referencia real a Firestore
+                idLocal: crypto.randomUUID(),
+                idOriginal: foodToAdd.id,
             };
             setPlanItems(prev => ({
                 ...prev,
@@ -135,6 +137,7 @@ const PlanCreator: React.FC = () => {
         }
     };
 
+    // --- LÓGICA DE GUARDADO ACTUALIZADA PARA USAR SUBCOLECCIONES (VERSIÓN 1) ---
     const handleSavePlan = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!nombrePlan.trim() || Object.values(planItems).flat().length === 0) {
@@ -144,29 +147,53 @@ const PlanCreator: React.FC = () => {
 
         try {
             setCargando(true);
-            const totales = calcularTotales(planItems);
 
-            // Transformar items para la estructura de PlanesPage
-            const comidasParaGuardar = Object.entries(planItems).map(([comida, items]) => ({
-                nombre: comida,
-                alimentos: items.map(item => ({
-                    refAlimento: item.idOriginal, // <-- clave para que PlanesPage lo reconozca
-                    cantidad: `${item.cantidad}${item.unidad}`,
-                })),
-            }));
+            const totalesDiarios = calcularTotales(planItems);
 
-            const nuevoPlan = {
+            const comidasParaGuardar = Object.entries(planItems)
+                .filter(([_, items]) => items.length > 0)
+                .map(([comidaNombre, items]) => {
+                    const macrosComida = calcularMacrosComida(items);
+                    return {
+                        nombre: comidaNombre,
+                        descripcion: '',
+                        alimentos: items.map(item => ({
+                            refAlimento: item.idOriginal,
+                            cantidad: `${item.cantidad}${item.unidad}`,
+                        })),
+                        macros: macrosComida,
+                    };
+                });
+
+            // 1. Crear el documento del plan principal
+            const planPrincipal = {
                 nombre: nombrePlan.trim(),
-                tipo: tipoPlan,
-                calorias: totales.calorias,
-                descripcion: '',
-                comidas: comidasParaGuardar,
+                descripcion: 'Plan generado por PlanCreator', // Puedes añadir una descripción
                 fechaCreacion: new Date(),
+                // Nota: ya no incluimos la clave 'versiones' aquí
             };
 
-            await addDoc(collection(db, 'planes'), nuevoPlan);
+            // Usamos addDoc para que Firestore genere el ID automáticamente
+            const planRef = await addDoc(collection(db, 'planes'), planPrincipal);
 
-            alert(`Plan "${nombrePlan}" guardado correctamente.`);
+            // 2. Crear el objeto de la versión que estamos creando
+            const versionData = {
+                tipo: tipoPlan,
+                calorias: totalesDiarios.kcal,
+                distribucion_macros: { proteina: 0, carbohidratos: 0, grasas: 0 }, // Añadir si tienes estos datos
+                objetivo: 'Objetivo no especificado',
+                comidas: comidasParaGuardar,
+                totales_diarios: totalesDiarios,
+                notas_tecnicas: [],
+            };
+
+            // 3. Guardar la versión como documento en la subcolección 'versiones'
+            const versionId = tipoPlan.toLowerCase().replace('ó', 'o'); // 'volumen' o 'recomposicion'
+
+            await setDoc(doc(db, `planes/${planRef.id}/versiones`, versionId), versionData);
+
+
+            alert(`Plan "${nombrePlan}" guardado correctamente en la subcolección "${versionId}".`);
             setNombrePlan('');
             setTipoPlan('Volumen');
             setPlanItems(INITIAL_PLAN_ITEMS);
@@ -178,6 +205,7 @@ const PlanCreator: React.FC = () => {
             setCargando(false);
         }
     };
+    // --- FIN LÓGICA DE GUARDADO ---
 
     const totalesActuales = useMemo(() => calcularTotales(planItems), [planItems]);
     const totalItems = Object.values(planItems).flat().length;
@@ -271,8 +299,8 @@ const PlanCreator: React.FC = () => {
 
                         <div className="bg-green-50 p-4 rounded-lg mb-4 border border-green-200">
                             <h4 className="text-green-700 font-semibold mb-2">Totales ({totalItems} ítems)</h4>
-                            <p><strong>Calorías:</strong> {totalesActuales.calorias.toFixed(0)} kcal</p>
-                            <p><strong>Proteínas:</strong> {totalesActuales.proteina.toFixed(1)}g</p>
+                            <p><strong>Calorías:</strong> {totalesActuales.kcal.toFixed(0)} kcal</p>
+                            <p><strong>Proteínas:</strong> {totalesActuales.proteinas.toFixed(1)}g</p>
                             <p><strong>Grasas:</strong> {totalesActuales.grasas.toFixed(1)}g</p>
                             <p><strong>Carbohidratos:</strong> {totalesActuales.carbohidratos.toFixed(1)}g</p>
                         </div>

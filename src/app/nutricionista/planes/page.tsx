@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { db } from '@/lib/firebase';
-import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
+import { db } from '@/lib/firebase';
+import { collection, onSnapshot, getDocs } from 'firebase/firestore';
 import CardPlan from '@/components/CardPlan';
 import TableAlimentos from '@/components/TableAlimentos';
-import { ChevronDown, ChevronUp, Edit, Trash2, Plus } from 'lucide-react';
+import { Plus, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface AlimentoBase {
     id: string;
@@ -27,158 +27,261 @@ interface PlanAlimento {
 
 interface Comida {
     nombre: string;
+    descripcion?: string;
     alimentos: PlanAlimento[];
+}
+
+interface VersionPlan {
+    tipo: string;
+    calorias: number;
+    distribucion_macros: {
+        proteina: number;
+        carbohidratos: number;
+        grasas: number;
+    };
+    objetivo: string;
+    comidas: Comida[];
+    totales_diarios: {
+        proteinas: number;
+        carbohidratos: number;
+        grasas: number;
+        kcal: number;
+    };
+    notas_tecnicas: string[];
 }
 
 interface Plan {
     id: string;
     nombre: string;
-    tipo: 'Volumen' | 'Recomposición';
-    calorias?: number;
-    descripcion?: string;
-    comidas?: Comida[];
+    descripcion: string;
+    asignadoA: string;
+    versiones: {
+        volumen?: VersionPlan;
+        recomposicion?: VersionPlan;
+    };
 }
 
 export default function PlanesPage() {
     const [planes, setPlanes] = useState<Plan[]>([]);
     const [alimentosBase, setAlimentosBase] = useState<AlimentoBase[]>([]);
+    const [versionSeleccionada, setVersionSeleccionada] = useState<{ [planId: string]: 'volumen' | 'recomposicion' }>({});
+    const [planesExpandido, setPlanesExpandido] = useState<{ [id: string]: boolean }>({});
     const [loading, setLoading] = useState(true);
-    const [expandedPlans, setExpandedPlans] = useState<Record<string, boolean>>({});
     const router = useRouter();
 
+    // 🔹 Escuchar alimentos en tiempo real
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [planesSnapshot, alimentosSnapshot] = await Promise.all([
-                    getDocs(collection(db, 'planes')),
-                    getDocs(collection(db, 'alimentos')),
-                ]);
-
-                const alimentosData: AlimentoBase[] = alimentosSnapshot.docs.map(doc => {
-                    const data = doc.data();
-                    return {
-                        id: doc.id,
-                        nombre: data.nombre || 'Sin nombre',
-                        tipo: data.tipo || 'General',
-                        cantidadBase: data.cantidadBase ?? 100,
-                        unidad: data.unidad || 'g',
-                        proteina: data.proteina ?? 0,
-                        carbohidratos: data.carbohidratos ?? 0,
-                        grasas: data.grasas ?? 0,
-                        equivalentes: data.equivalentes || [],
-                    };
-                });
-                setAlimentosBase(alimentosData);
-
-                const planesData: Plan[] = planesSnapshot.docs.map(doc => ({
+        const unsub = onSnapshot(collection(db, 'alimentos'), (snapshot) => {
+            const data: AlimentoBase[] = snapshot.docs.map((doc) => {
+                const d = doc.data();
+                return {
                     id: doc.id,
-                    ...doc.data(),
-                } as Plan));
+                    nombre: d.nombre || 'Nombre no disponible',
+                    tipo: d.tipo || 'General',
+                    cantidadBase: d.cantidadBase ?? 100,
+                    unidad: d.unidad || 'g',
+                    proteina: d.proteina ?? 0,
+                    carbohidratos: d.carbohidratos ?? 0,
+                    grasas: d.grasas ?? 0,
+                    equivalentes: d.equivalentes || [],
+                };
+            });
+            setAlimentosBase(data);
+        });
 
-                setPlanes(planesData);
-            } catch (err) {
-                console.error('Error obteniendo datos:', err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
+        return () => unsub();
     }, []);
 
-    const toggleExpand = (id: string) => {
-        setExpandedPlans(prev => ({ ...prev, [id]: !prev[id] }));
+    // 🔹 Escuchar planes en tiempo real (y recargar versiones)
+    useEffect(() => {
+        const unsub = onSnapshot(collection(db, 'planes'), async (snapshot) => {
+            const planesData: Plan[] = [];
+
+            for (const planDoc of snapshot.docs) {
+                const planData = planDoc.data();
+
+                // Subcolección de versiones
+                const versionesRef = collection(db, `planes/${planDoc.id}/versiones`);
+                const versionesSnapshot = await getDocs(versionesRef);
+
+                const versiones: Plan['versiones'] = {};
+                versionesSnapshot.forEach((vDoc) => {
+                    const vData = vDoc.data() as VersionPlan;
+                    if (vDoc.id.toLowerCase().includes('volumen')) {
+                        versiones.volumen = vData;
+                    } else if (vDoc.id.toLowerCase().includes('recomposicion')) {
+                        versiones.recomposicion = vData;
+                    }
+                });
+
+                if (versiones.volumen || versiones.recomposicion) {
+                    planesData.push({
+                        id: planDoc.id,
+                        nombre: planData.nombre,
+                        descripcion: planData.descripcion || '',
+                        asignadoA: planData.asignadoA || 'Sin asignar',
+                        versiones,
+                    });
+                }
+            }
+
+            setPlanes(planesData);
+            setLoading(false);
+        });
+
+        return () => unsub();
+    }, []);
+
+    const handleToggleVersion = (planId: string, version: 'volumen' | 'recomposicion') => {
+        setVersionSeleccionada((prev) => ({
+            ...prev,
+            [planId]: version,
+        }));
     };
 
-    const handleEliminarPlan = async (id: string) => {
-        if (confirm('¿Deseas eliminar este plan?')) {
-            await deleteDoc(doc(db, 'planes', id));
-            setPlanes(prev => prev.filter(p => p.id !== id));
-        }
+    const togglePlan = (id: string) => {
+        setPlanesExpandido((prev) => ({ ...prev, [id]: !prev[id] }));
     };
 
-    const handleEditarPlan = (plan: Plan) => {
-        // Redirigir a PlanCreator con el ID del plan o pasar datos por query/state
-        router.push(`/plancreator?editar=${plan.id}`);
-    };
+    if (loading)
+        return (
+            <div className="text-gray-300 text-lg text-center mt-10">
+                Cargando planes...
+            </div>
+        );
 
-    if (loading) return <p className="text-gray-300 text-center mt-10">Cargando planes...</p>;
-    if (!planes.length) return <p className="text-gray-400 text-center mt-10">No hay planes disponibles aún.</p>;
+    if (!planes.length)
+        return (
+            <div className="text-gray-400 text-center mt-10">
+                No hay planes disponibles aún.
+            </div>
+        );
 
     return (
-        <div className="max-w-6xl mx-auto p-6 space-y-6">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold text-indigo-400">Gestión de Planes</h1>
+        <div className="w-full max-w-6xl mx-auto p-6 space-y-10 relative">
+            {/* 🔹 Header */}
+            <div className="flex justify-between items-center mb-8">
+                <h1 className="text-3xl font-bold text-gray-800">
+                    Planes de Alimentación
+                </h1>
+
                 <button
                     onClick={() => router.push('/plancreator')}
-                    className="flex items-center gap-2 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition"
+                    className="flex items-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition duration-200"
                 >
-                    <Plus className="w-5 h-5" /> Crear Plan
+                    <Plus className="w-5 h-5 mr-2" />
+                    Crear nuevo plan
                 </button>
             </div>
 
-            {planes.map(plan => (
-                <div key={plan.id} className="bg-gray-800 border border-gray-700 rounded-xl shadow-2xl overflow-hidden">
-                    {/* Header compacto */}
+            {planes.map((plan) => {
+                const versionActiva =
+                    versionSeleccionada[plan.id] ||
+                    (plan.versiones.volumen ? 'volumen' : 'recomposicion');
+
+                const dataVersion =
+                    plan.versiones[versionActiva] ||
+                    plan.versiones.volumen ||
+                    plan.versiones.recomposicion;
+
+                return (
                     <div
-                        onClick={() => toggleExpand(plan.id)}
-                        className="flex justify-between items-center p-4 cursor-pointer hover:bg-gray-700 transition"
+                        key={plan.id}
+                        className="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-md hover:shadow-lg transition duration-200"
                     >
-                        <div>
-                            <h2 className="text-xl font-semibold text-indigo-300">{plan.nombre}</h2>
-                            <p className="text-sm text-green-400">
-                                {plan.tipo} - {(plan.calorias ?? 0).toFixed(0)} kcal
-                            </p>
-                        </div>
-                        <div className="flex gap-2 items-center">
-                            <button
-                                onClick={e => {
-                                    e.stopPropagation();
-                                    handleEditarPlan(plan);
-                                }}
-                                title="Editar"
-                                className="p-1 rounded-full hover:bg-gray-700"
-                            >
-                                <Edit className="w-5 h-5 text-blue-400" />
-                            </button>
-                            <button
-                                onClick={e => {
-                                    e.stopPropagation();
-                                    handleEliminarPlan(plan.id);
-                                }}
-                                title="Eliminar"
-                                className="p-1 rounded-full hover:bg-red-700"
-                            >
-                                <Trash2 className="w-5 h-5 text-red-500" />
-                            </button>
-                            {expandedPlans[plan.id] ? <ChevronUp className="w-5 h-5 text-gray-300" /> : <ChevronDown className="w-5 h-5 text-gray-300" />}
-                        </div>
-                    </div>
-
-                    {/* Contenido expandido */}
-                    {expandedPlans[plan.id] && (
-                        <div className="p-4 border-t border-gray-700 space-y-4">
-                            <CardPlan
-                                nombre={plan.nombre}
-                                tipo={plan.tipo}
-                                calorias={plan.calorias ?? 0}
-                                descripcion={plan.descripcion}
-                            />
-
-                            {plan.comidas && plan.comidas.length > 0 ? (
-                                plan.comidas.map((comida, idx) => (
-                                    <div key={idx} className="mt-4 pt-2 border-t border-gray-700">
-                                        <h3 className="text-lg font-bold text-indigo-200 mb-2">{comida.nombre}</h3>
-                                        <TableAlimentos alimentos={comida.alimentos} alimentosBase={alimentosBase} />
-                                    </div>
-                                ))
+                        {/* Encabezado del plan */}
+                        <div
+                            className="flex justify-between items-center cursor-pointer"
+                            onClick={() => togglePlan(plan.id)}
+                        >
+                            <div>
+                                <h2 className="text-2xl font-bold text-indigo-300">
+                                    {plan.nombre}
+                                </h2>
+                                <p className="text-gray-400 text-sm">
+                                    Asignado a:{' '}
+                                    <span className="text-indigo-400">{plan.asignadoA}</span>
+                                </p>
+                                <p className="text-gray-400 mt-1">{plan.descripcion}</p>
+                            </div>
+                            {planesExpandido[plan.id] ? (
+                                <ChevronUp className="text-indigo-300 w-6 h-6" />
                             ) : (
-                                <p className="text-gray-400 text-sm mt-2">Este plan aún no tiene comidas asignadas.</p>
+                                <ChevronDown className="text-indigo-300 w-6 h-6" />
                             )}
                         </div>
-                    )}
-                </div>
-            ))}
+
+                        {/* Contenido expandible */}
+                        <div
+                            className={`transition-all duration-500 overflow-hidden ${
+                                planesExpandido[plan.id] ? 'max-h-[4000px] mt-4' : 'max-h-0'
+                            }`}
+                        >
+                            <div className="flex space-x-2 mt-4 sm:mt-0">
+                                {plan.versiones.volumen && (
+                                    <button
+                                        onClick={() => handleToggleVersion(plan.id, 'volumen')}
+                                        className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
+                                            versionActiva === 'volumen'
+                                                ? 'bg-indigo-500 text-white'
+                                                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                        }`}
+                                    >
+                                        Volumen
+                                    </button>
+                                )}
+                                {plan.versiones.recomposicion && (
+                                    <button
+                                        onClick={() => handleToggleVersion(plan.id, 'recomposicion')}
+                                        className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
+                                            versionActiva === 'recomposicion'
+                                                ? 'bg-indigo-500 text-white'
+                                                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                        }`}
+                                    >
+                                        Recomposición
+                                    </button>
+                                )}
+                            </div>
+
+                            {dataVersion && (
+                                <>
+                                    <CardPlan
+                                        nombre={dataVersion.tipo}
+                                        tipo={dataVersion.tipo}
+                                        calorias={dataVersion.calorias}
+                                        descripcion={dataVersion.objetivo}
+                                    />
+
+                                    {/* 🔹 Comidas (siempre visibles, sin colapsar) */}
+                                    {dataVersion.comidas.map((comida, idx) => (
+                                        <div key={idx} className="mt-6">
+                                            <h3 className="text-lg font-semibold text-indigo-300 mb-2">
+                                                {comida.nombre}
+                                            </h3>
+                                            <TableAlimentos
+                                                alimentos={comida.alimentos}
+                                                alimentosBase={alimentosBase}
+                                            />
+                                        </div>
+                                    ))}
+
+                                    <div className="mt-6 text-gray-400 text-sm">
+                                        <h4 className="text-indigo-400 font-semibold mb-2">
+                                            Notas Técnicas
+                                        </h4>
+                                        <ul className="list-disc list-inside space-y-1">
+                                            {dataVersion.notas_tecnicas.map((nota, i) => (
+                                                <li key={i}>{nota}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                );
+            })}
         </div>
     );
 }
