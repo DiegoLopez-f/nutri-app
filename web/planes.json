@@ -1,0 +1,370 @@
+{
+  "planA": {
+    "nombre": "Plan A",
+    "descripcion": "Ciclo de 3 días con rotación proteica, iniciando con base de avena.",
+    "asignadoA": "scjCdetoZ3SD2QWT8IvxWxnyJGn2",
+    "versiones": {
+      "volumen": {
+        "tipo": "Volumen",
+        "calorias": 1850,
+        "distribucion_macros": { "proteina": 25, "carbohidratos": 50, "grasas": 25 },
+        "objetivo": "Favorecer ganancia muscular con digestión liviana y alimentos antiinflamatorios.",
+        "comidas": [
+          {
+            "nombre": "Desayuno",
+            "descripcion": "50 g avena cocida en leche descremada (200 ml), ½ plátano (50 g), 10 g maní natural, 1 cda miel (10 g)",
+            "alimentos": [
+              { "refAlimento": "avena_cocida", "cantidad": "50 g" },
+              { "refAlimento": "leche_descremada", "cantidad": "200 ml" },
+              { "refAlimento": "platano", "cantidad": "50 g" },
+              { "refAlimento": "maní_natural", "cantidad": "10 g" },
+              { "refAlimento": "miel", "cantidad": "10 g" }
+            ],
+            "macros": { "proteinas": 13, "carbohidratos": 52, "grasas": 10, "kcal": 380 }
+          },
+          {
+            "nombre": "Colación",
+            "descripcion": "Yogur natural alto en proteína (150 g) + 10 g nueces + 1 manzana (120 g)",
+            "alimentos": [
+              { "refAlimento": "yogur_natural_alto_proteina", "cantidad": "150 g" },
+              { "refAlimento": "nueces", "cantidad": "10 g" },
+              { "refAlimento": "manzana", "cantidad": "120 g" }
+            ],
+            "macros": { "proteinas": 13, "carbohidratos": 25, "grasas": 9, "kcal": 245 }
+          },
+          {
+            "nombre": "Almuerzo",
+            "descripcion": "100 g pechuga de pollo + 120 g arroz cocido + 100 g brócoli + 10 ml aceite de oliva",
+            "alimentos": [
+              { "refAlimento": "pechuga_pollo", "cantidad": "100 g" },
+              { "refAlimento": "arroz_blanco", "cantidad": "120 g" },
+              { "refAlimento": "brocoli", "cantidad": "100 g" },
+              { "refAlimento": "aceite_oliva", "cantidad": "10 ml" }
+            ],
+            "macros": { "proteinas": 35, "carbohidratos": 45, "grasas": 13, "kcal": 470 }
+          },
+          {
+            "nombre": "Cena",
+            "descripcion": "90 g atún en agua + 150 g puré de papas + 50 g zanahoria + 1 cda aceite de oliva (10 ml)",
+            "alimentos": [
+              { "refAlimento": "atun_agua", "cantidad": "90 g" },
+              { "refAlimento": "pure_papas", "cantidad": "150 g" },
+              { "refAlimento": "zanahoria", "cantidad": "50 g" },
+              { "refAlimento": "aceite_oliva", "cantidad": "10 ml" }
+            ],
+            "macros": { "proteinas": 33, "carbohidratos": 35, "grasas": 12, "kcal": 390 }
+          }
+        ],
+        "totales_diarios": { "proteinas": 94, "carbohidratos": 157, "grasas": 44, "kcal": 1850 },
+        "notas_tecnicas": [
+          "Los carbohidratos se concentran en desayuno y almuerzo para apoyar el rendimiento físico.",
+          "La cena es liviana en fibra, lo que mejora la recuperación y el sueño.",
+          "Puedes intercambiar arroz ↔ quinoa (100 g quinoa cocida = 21 g CH + 4 g P + 2 g G).",
+          "Los frutos secos se alternan en proporción 2 : 1 maní/nueces para balance omega 6/3 y costo.",
+          "2 huevos enteros pueden reemplazar el atún o el pollo 2×/semana sin sobrepasar tu tope de 6."
+        ]
+      },
+      "recomposicion": {
+        "tipo": "Recomposición",
+        "calorias": 1650,
+        "distribucion_macros": { "proteina": 35, "carbohidratos": 40, "grasas": 25 },
+        "objetivo": "Mantener masa muscular y reducir grasa corporal sin perder rendimiento.",
+        "comidas": [
+          {
+            "nombre": "Desayuno",
+            "descripcion": "40 g avena cocida en agua + 200 ml leche descremada + ½ plátano (50 g) + 10 g maní",
+            "alimentos": [
+              { "refAlimento": "avena_cocida", "cantidad": "40 g" },
+              { "refAlimento": "leche_descremada", "cantidad": "200 ml" },
+              { "refAlimento": "platano", "cantidad": "50 g" },
+              { "refAlimento": "maní_natural", "cantidad": "10 g" }
+            ],
+            "macros": { "proteinas": 15, "carbohidratos": 38, "grasas": 8, "kcal": 300 }
+          },
+          {
+            "nombre": "Colación",
+            "descripcion": "Yogur alto en proteína (150 g) + 10 g nueces",
+            "alimentos": [
+              { "refAlimento": "yogur_natural_alto_proteina", "cantidad": "150 g" },
+              { "refAlimento": "nueces", "cantidad": "10 g" }
+            ],
+            "macros": { "proteinas": 13, "carbohidratos": 7, "grasas": 9, "kcal": 180 }
+          },
+          {
+            "nombre": "Almuerzo",
+            "descripcion": "120 g pescado blanco + 100 g arroz integral + 100 g verduras variadas + 10 ml aceite de oliva",
+            "alimentos": [
+              { "refAlimento": "pescado_blanco", "cantidad": "120 g" },
+              { "refAlimento": "arroz_integral", "cantidad": "100 g" },
+              { "refAlimento": "brocoli", "cantidad": "100 g" },
+              { "refAlimento": "aceite_oliva", "cantidad": "10 ml" }
+            ],
+            "macros": { "proteinas": 36, "carbohidratos": 38, "grasas": 13, "kcal": 420 }
+          },
+          {
+            "nombre": "Cena",
+            "descripcion": "2 huevos enteros + 100 g puré de papas + ensalada (tomate y lechuga, 100 g) + 5 ml aceite de oliva",
+            "alimentos": [
+              { "refAlimento": "huevo_entero", "cantidad": "2 unidades" },
+              { "refAlimento": "pure_papas", "cantidad": "100 g" },
+              { "refAlimento": "tomate", "cantidad": "50 g" },
+              { "refAlimento": "lechuga", "cantidad": "50 g" },
+              { "refAlimento": "aceite_oliva", "cantidad": "5 ml" }
+            ],
+            "macros": { "proteinas": 20, "carbohidratos": 20, "grasas": 10, "kcal": 330 }
+          }
+        ],
+        "totales_diarios": { "proteinas": 84, "carbohidratos": 103, "grasas": 40, "kcal": 1650 },
+        "notas_tecnicas": [
+          "Mayor proporción proteica para favorecer la recomposición y preservar masa magra.",
+          "Reducción moderada de carbohidratos, sobre todo en la cena, para mantener flexibilidad metabólica.",
+          "Puedes usar quinoa o camote en lugar de arroz cuando quieras variar el perfil de fibra.",
+          "Grasas repartidas durante el día para optimizar saciedad y absorción de vitaminas liposolubles."
+        ]
+      }
+    }
+  },
+  "planB": {
+    "nombre": "Plan B",
+    "descripcion": "Ciclo con base en pan integral y mayor énfasis en proteína y grasa matutina.",
+    "asignadoA": "scjCdetoZ3SD2QWT8IvxWxnyJGn2",
+    "versiones": {
+      "volumen": {
+        "tipo": "Volumen",
+        "calorias": 1850,
+        "distribucion_macros": { "proteina": 25, "carbohidratos": 50, "grasas": 25 },
+        "objetivo": "Mejorar la recuperación post-entreno y aumentar masa magra sin retención de grasa.",
+        "comidas": [
+          {
+            "nombre": "Desayuno",
+            "descripcion": "2 rebanadas pan integral (60 g) + 1 huevo entero + 30 g jamón de pavo + ½ palta (50 g) + café o té",
+            "alimentos": [
+              { "refAlimento": "pan_integral", "cantidad": "60 g" },
+              { "refAlimento": "huevo_entero", "cantidad": "60 g" },
+              { "refAlimento": "jamon_pavo", "cantidad": "30 g" },
+              { "refAlimento": "palta", "cantidad": "50 g" }
+            ],
+            "macros": { "proteinas": 18, "carbohidratos": 30, "grasas": 14, "kcal": 360 }
+          },
+          {
+            "nombre": "Colación",
+            "descripcion": "150 g yogur natural + 40 g avena + 10 g maní",
+            "alimentos": [
+              { "refAlimento": "yogur_natural_alto_proteina", "cantidad": "150 g" },
+              { "refAlimento": "avena_cocida", "cantidad": "40 g" },
+              { "refAlimento": "maní_natural", "cantidad": "10 g" }
+            ],
+            "macros": { "proteinas": 13, "carbohidratos": 32, "grasas": 8, "kcal": 290 }
+          },
+          {
+            "nombre": "Almuerzo",
+            "descripcion": "100 g carne magra (posta o asiento) + 120 g puré de papas + 100 g zanahoria + 10 ml aceite de oliva",
+            "alimentos": [
+              { "refAlimento": "carne_magra", "cantidad": "100 g" },
+              { "refAlimento": "pure_papas", "cantidad": "120 g" },
+              { "refAlimento": "zanahoria", "cantidad": "100 g" },
+              { "refAlimento": "aceite_oliva", "cantidad": "10 ml" }
+            ],
+            "macros": { "proteinas": 33, "carbohidratos": 45, "grasas": 13, "kcal": 460 }
+          },
+          {
+            "nombre": "Cena",
+            "descripcion": "90 g filete de pescado blanco + 100 g quinoa cocida + 100 g zapallo italiano salteado + 10 ml aceite de oliva",
+            "alimentos": [
+              { "refAlimento": "pescado_blanco", "cantidad": "90 g" },
+              { "refAlimento": "quinoa_cocida", "cantidad": "100 g" },
+              { "refAlimento": "zapallo_italiano", "cantidad": "100 g" },
+              { "refAlimento": "aceite_oliva", "cantidad": "10 ml" }
+            ],
+            "macros": { "proteinas": 32, "carbohidratos": 35, "grasas": 12, "kcal": 385 }
+          }
+        ],
+        "totales_diarios": { "proteinas": 96, "carbohidratos": 142, "grasas": 47, "kcal": 1850 },
+        "notas_tecnicas": [
+          "Desayuno con combinación óptima de proteína, carbohidrato y grasa saludable para controlar el cortisol matinal.",
+          "Quinoa nocturna aporta magnesio y triptófano, mejorando descanso y síntesis proteica.",
+          "Si entrenas temprano, puedes invertir desayuno ↔ colación sin alterar macros.",
+          "Mantiene 2 huevos a la semana aquí (en total con Plan A y C llegarás a los 6)."
+        ]
+      },
+      "recomposicion": {
+        "tipo": "Recomposición",
+        "calorias": 1650,
+        "distribucion_macros": { "proteina": 35, "carbohidratos": 40, "grasas": 25 },
+        "objetivo": "Aumentar densidad proteica y mantener control de glucemia sin déficit agresivo.",
+        "comidas": [
+          {
+            "nombre": "Desayuno",
+            "descripcion": "2 rebanadas pan integral (60 g) + 30 g jamón de pavo + ½ palta (50 g)",
+            "alimentos": [
+              { "refAlimento": "pan_integral", "cantidad": "60 g" },
+              { "refAlimento": "jamon_pavo", "cantidad": "30 g" },
+              { "refAlimento": "palta", "cantidad": "50 g" }
+            ],
+            "macros": { "proteinas": 16, "carbohidratos": 25, "grasas": 12, "kcal": 290 }
+          },
+          {
+            "nombre": "Colación",
+            "descripcion": "150 g yogur alto en proteína + 10 g nueces",
+            "alimentos": [
+              { "refAlimento": "yogur_natural_alto_proteina", "cantidad": "150 g" },
+              { "refAlimento": "nueces", "cantidad": "10 g" }
+            ],
+            "macros": { "proteinas": 13, "carbohidratos": 8, "grasas": 9, "kcal": 180 }
+          },
+          {
+            "nombre": "Almuerzo",
+            "descripcion": "120 g pechuga de pollo + 100 g arroz integral + 100 g brócoli + 10 ml aceite de oliva",
+            "alimentos": [
+              { "refAlimento": "pechuga_pollo", "cantidad": "120 g" },
+              { "refAlimento": "arroz_integral", "cantidad": "100 g" },
+              { "refAlimento": "brocoli", "cantidad": "100 g" },
+              { "refAlimento": "aceite_oliva", "cantidad": "10 ml" }
+            ],
+            "macros": { "proteinas": 36, "carbohidratos": 38, "grasas": 13, "kcal": 430 }
+          },
+          {
+            "nombre": "Cena",
+            "descripcion": "100 g tofu o 2 huevos enteros + 80 g camote cocido + ensalada verde (100 g) + 5 ml aceite de oliva",
+            "alimentos": [
+              { "refAlimento": "tofu", "cantidad": "100 g" },
+              { "refAlimento": "huevo_entero", "cantidad": "2 unidades" },
+              { "refAlimento": "camote_cocido", "cantidad": "80 g" },
+              { "refAlimento": "lechuga", "cantidad": "50 g" },
+              { "refAlimento": "aceite_oliva", "cantidad": "5 ml" }
+            ],
+            "macros": { "proteinas": 19, "carbohidratos": 25, "grasas": 10, "kcal": 330 }
+          }
+        ],
+        "totales_diarios": { "proteinas": 84, "carbohidratos": 96, "grasas": 44, "kcal": 1650 },
+        "notas_tecnicas": [
+          "La reducción de carbohidratos proviene del desayuno y la cena, manteniendo rendimiento estable.",
+          "Se priorizan grasas insaturadas y proteína completa en cada comida.",
+          "Si el entrenamiento es intenso, puedes aumentar 10–15 g de carbohidratos (arroz o avena).",
+          "Tofu o huevo en la cena aportan triptófano, ideal para recuperación muscular nocturna."
+        ]
+      }
+    }
+  },
+  "planC": {
+    "nombre": "Plan C",
+    "descripcion": "Ciclo con mayor aporte de legumbres para variar el perfil de fibra.",
+    "asignadoA": "ENtLwIsNArbmUyKxDNPFphVfVr02",
+    "versiones": {
+      "volumen": {
+        "tipo": "Volumen",
+        "calorias": 1850,
+        "distribucion_macros": { "proteina": 25, "carbohidratos": 50, "grasas": 25 },
+        "objetivo": "Mantener estímulo anabólico y buena digestión, con mayor aporte vegetal y rotación proteica.",
+        "comidas": [
+          {
+            "nombre": "Desayuno",
+            "descripcion": "2 rebanadas pan integral (60 g) + 40 g queso fresco + ½ palta (50 g) + café",
+            "alimentos": [
+              { "refAlimento": "pan_integral", "cantidad": "60 g" },
+              { "refAlimento": "queso_fresco", "cantidad": "40 g" },
+              { "refAlimento": "palta", "cantidad": "50 g" }
+            ],
+            "macros": { "proteinas": 17, "carbohidratos": 28, "grasas": 15, "kcal": 330 }
+          },
+          {
+            "nombre": "Colación",
+            "descripcion": "200 g yogur natural + 15 g miel + 15 g maní sin sal",
+            "alimentos": [
+              { "refAlimento": "yogur_natural_alto_proteina", "cantidad": "200 g" },
+              { "refAlimento": "miel", "cantidad": "15 g" },
+              { "refAlimento": "maní_natural", "cantidad": "15 g" }
+            ],
+            "macros": { "proteinas": 12, "carbohidratos": 28, "grasas": 9, "kcal": 250 }
+          },
+          {
+            "nombre": "Almuerzo",
+            "descripcion": "100 g pollo + 100 g arroz + 100 g lentejas + 10 ml aceite de oliva",
+            "alimentos": [
+              { "refAlimento": "pechuga_pollo", "cantidad": "100 g" },
+              { "refAlimento": "arroz_blanco", "cantidad": "100 g" },
+              { "refAlimento": "lentejas_cocidas", "cantidad": "100 g" },
+              { "refAlimento": "aceite_oliva", "cantidad": "10 ml" }
+            ],
+            "macros": { "proteinas": 34, "carbohidratos": 55, "grasas": 13, "kcal": 470 }
+          },
+          {
+            "nombre": "Cena",
+            "descripcion": "90 g atún + 100 g papa cocida + ensalada verde (100 g) + 5 ml aceite de oliva",
+            "alimentos": [
+              { "refAlimento": "atun_agua", "cantidad": "90 g" },
+              { "refAlimento": "pure_papas", "cantidad": "100 g" },
+              { "refAlimento": "lechuga", "cantidad": "50 g" },
+              { "refAlimento": "aceite_oliva", "cantidad": "5 ml" }
+            ],
+            "macros": { "proteinas": 30, "carbohidratos": 30, "grasas": 9, "kcal": 360 }
+          }
+        ],
+        "totales_diarios": { "proteinas": 93, "carbohidratos": 141, "grasas": 46, "kcal": 1850 },
+        "notas_tecnicas": [
+          "Lentejas combinadas con arroz aportan proteína vegetal completa (lisina + metionina).",
+          "Desayuno sin huevo para dar descanso digestivo.",
+          "Plan especialmente útil en días con menos entrenamiento de torso.",
+          "Puedes reemplazar el atún por 2 claras + 1 huevo entero para variar textura y digestión."
+        ]
+      },
+      "recomposicion": {
+        "tipo": "Recomposición",
+        "calorias": 1650,
+        "distribucion_macros": { "proteina": 35, "carbohidratos": 40, "grasas": 25 },
+        "objetivo": "Control de saciedad y digestión ligera sin sacrificar densidad proteica.",
+        "comidas": [
+          {
+            "nombre": "Desayuno",
+            "descripcion": "1 rebanada pan integral (30 g) + 30 g queso fresco + ½ palta (50 g)",
+            "alimentos": [
+              { "refAlimento": "pan_integral", "cantidad": "30 g" },
+              { "refAlimento": "queso_fresco", "cantidad": "30 g" },
+              { "refAlimento": "palta", "cantidad": "50 g" }
+            ],
+            "macros": { "proteinas": 10, "carbohidratos": 13, "grasas": 12, "kcal": 190 }
+          },
+          {
+            "nombre": "Colación",
+            "descripcion": "150 g yogur alto en proteína + 10 g maní",
+            "alimentos": [
+              { "refAlimento": "yogur_natural_alto_proteina", "cantidad": "150 g" },
+              { "refAlimento": "maní_natural", "cantidad": "10 g" }
+            ],
+            "macros": { "proteinas": 15, "carbohidratos": 8, "grasas": 7, "kcal": 170 }
+          },
+          {
+            "nombre": "Almuerzo",
+            "descripcion": "100 g pollo o pavo + 100 g lentejas + ensalada (100 g) + 10 ml aceite de oliva",
+            "alimentos": [
+              { "refAlimento": "pechuga_pollo", "cantidad": "100 g" },
+              { "refAlimento": "lentejas_cocidas", "cantidad": "100 g" },
+              { "refAlimento": "lechuga", "cantidad": "50 g" },
+              { "refAlimento": "tomate", "cantidad": "50 g" },
+              { "refAlimento": "aceite_oliva", "cantidad": "10 ml" }
+            ],
+            "macros": { "proteinas": 32, "carbohidratos": 35, "grasas": 13, "kcal": 420 }
+          },
+          {
+            "nombre": "Cena",
+            "descripcion": "90 g atún + 80 g papa cocida + ensalada verde + 5 ml aceite de oliva",
+            "alimentos": [
+              { "refAlimento": "atun_agua", "cantidad": "90 g" },
+              { "refAlimento": "pure_papas", "cantidad": "80 g" },
+              { "refAlimento": "lechuga", "cantidad": "50 g" },
+              { "refAlimento": "aceite_oliva", "cantidad": "5 ml" }
+            ],
+            "macros": { "proteinas": 27, "carbohidratos": 20, "grasas": 10, "kcal": 310 }
+          }
+        ],
+        "totales_diarios": { "proteinas": 84, "carbohidratos": 76, "grasas": 42, "kcal": 1650 },
+        "notas_tecnicas": [
+          "Alto en fibra soluble, ideal para días con menor tránsito intestinal.",
+          "Incluye más proteína vegetal (lentejas) y menos carga glucémica total.",
+          "Aporta variedad a lo largo del ciclo sin afectar rendimiento ni digestión.",
+          "Puedes usar pollo o tofu en el almuerzo para variar sin alterar macros."
+        ]
+      }
+    }
+  }
+}

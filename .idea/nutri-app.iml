@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/temp" />
+      <excludeFolder url="file://$MODULE_DIR$/tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/mobile/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/mobile/.idea/caches" />
+      <excludeFolder url="file://$MODULE_DIR$/mobile/app/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/mobile/app/build" />
+      <excludeFolder url="file://$MODULE_DIR$/mobile/build" />
+      <excludeFolder url="file://$MODULE_DIR$/web/node_modules" />
+      <excludeFolder url="file://$MODULE_DIR$/web/node_modules/@emnapi" />
+      <excludeFolder url="file://$MODULE_DIR$/web/node_modules/@napi-rs" />
+      <excludeFolder url="file://$MODULE_DIR$/web/node_modules/@tybys" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
