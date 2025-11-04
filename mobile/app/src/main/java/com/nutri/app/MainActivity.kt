@@ -19,6 +19,7 @@ import com.nutri.app.ui.planes.PlanScreen
 import java.util.concurrent.Executor
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity // <-- ¡Importación necesaria!
+import com.nutri.app.ui.planes.PlanDetalleScreen
 
 // ----------------------------------------------------
 // CAMBIADO A FragmentActivity PARA BiometricPrompt
@@ -99,6 +100,15 @@ class MainActivity : FragmentActivity() {
                     val uid = backStackEntry.arguments?.getString("uid") ?: ""
                     PlanScreen(uid = uid, navController = navController)
                 }
+
+                // ---- Pantalla de Detalle del Plan ----
+                composable(
+                    route = "planDetalle/{planId}",
+                    arguments = listOf(navArgument("planId") { type = NavType.StringType })
+                ) { backStackEntry ->
+                    val planId = backStackEntry.arguments?.getString("planId") ?: ""
+                    PlanDetalleScreen(planId = planId, navController = navController)
+                }
             }
         }
     }
@@ -135,7 +145,6 @@ class MainActivity : FragmentActivity() {
             .setNegativeButtonText("Cancelar")
             .build()
 
-        // El método authenticate ya es reconocido
         biometricPrompt.authenticate(promptInfo)
     }
 

@@ -7,12 +7,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.nutri.app.data.model.Plan
 import com.nutri.app.ui.components.PlanCard
 import com.nutri.app.viewmodel.PlanViewModel
+import com.nutri.app.data.FirebaseUploader
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.rememberCoroutineScope
 
 @ExperimentalMaterial3Api
 @Composable
@@ -24,6 +28,8 @@ fun PlanScreen(
     val planes by viewModel.planes.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(uid) {
         viewModel.cargarPlanes(uid)
@@ -32,18 +38,30 @@ fun PlanScreen(
     Scaffold(
         topBar = { TopAppBar(title = { Text("Mis Planes") }) },
         floatingActionButton = {
-            FloatingActionButton(onClick = {
-                // ejemplo: crear plan rápido
-                viewModel.crearPlan(
-                    uid,
-                    Plan(
-                        nombre = "Nuevo plan",
-                        descripcion = "Plan generado desde la app",
-                        fechaAsignacion = System.currentTimeMillis()
+            Column {
+                FloatingActionButton(onClick = {
+                    // ejemplo: crear plan rápido
+                    viewModel.crearPlan(
+                        uid,
+                        Plan(
+                            nombre = "Nuevo plan",
+                            descripcion = "Plan generado desde la app",
+                            fechaAsignacion = System.currentTimeMillis()
+                        )
                     )
-                )
-            }) {
-                Text("+")
+                }) {
+                    Text("+")
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                // Botón temporal solo para desarrollo/pruebas: recargar planes base desde JSON
+                // Se debe eliminar después
+                Button(onClick = {
+                    coroutineScope.launch {
+                        FirebaseUploader.subirPlanesDesdeJson(context)
+                    }
+                }) {
+                    Text("Recargar planes base")
+                }
             }
         }
     ) { padding ->
